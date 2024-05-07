@@ -1,15 +1,17 @@
+package ai;
+
 import java.util.*;
 
 public class BFS {
     static class Edge {
         int src;
         int dest;
-        int wt;
+        
 
-        public Edge(int src, int dest, int wt) {
+        public Edge(int src, int dest ) {
             this.src = src;
             this.dest = dest;
-            this.wt = wt;
+            
         }
     }
 
@@ -18,12 +20,12 @@ public class BFS {
             graph[i] = new ArrayList<>();
         }
 
-        System.out.println("Enter edges in the format: source destination weight");
+        System.out.println("Enter edges in the format: source destination ");
         for (int i = 0; i < numEdges; i++) {
             int src = scanner.nextInt();
             int dest = scanner.nextInt();
-            int wt = scanner.nextInt();
-            graph[src].add(new Edge(src, dest, wt));
+            
+            graph[src].add(new Edge(src, dest ));
         }
     }
 
