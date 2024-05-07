@@ -1,73 +1,68 @@
 import java.util.*;
-public class NQueensProblem {
-    private int[] queens;
-    private int numSolutions;
 
-    public NQueensProblem(int n) {
-        queens = new int[n];
-    }
+public class NQueens {
 
-    public void solve() {
-        solve(0);
-    }
-    
-    private void solve(int row) {
-        if (row == queens.length) {
-            numSolutions++;
-            printSolution();
-        } else {
-            for (int col = 0; col < queens.length; col++) {
-                queens[row] = col;
-                if (isValid(row, col)) {
-                    solve(row + 1);
-                }
-            }
-        }
-    }
-
-    private boolean isValid(int row, int col) {
+    private static boolean isSafe(int[][] board, int row, int col, int n) {
+        // Check if there is a queen in the same column
         for (int i = 0; i < row; i++) {
-            int diff = Math.abs(queens[i] - col);
-            if (diff == 0 || diff == row - i) {
+            if (board[i][col] == 1) {
                 return false;
             }
         }
+
+        // Check upper diagonal on left side
+        for (int i = row, j = col; i >= 0 && j >= 0; i--, j--) {
+            if (board[i][j] == 1) {
+                return false;
+            }
+        }
+
+        // Check upper diagonal on right side
+        for (int i = row, j = col; i >= 0 && j < n; i--, j++) {
+            if (board[i][j] == 1) {
+                return false;
+            }
+        }
+
         return true;
     }
 
-    private void printSolution() {
-        if(numSolutions==1){
-            System.out.print("Solution: ");
-        for (int i = 0; i < queens.length; i++) {
-            System.out.print(queens[i] + " ");
+    private static boolean solveNQueensUtil(int[][] board, int row, int n) {
+        if (row == n) {
+            return true;
         }
-        System.out.println();
-        System.out.println("The Matrix Representation:");
-        int [][]arr=new int[queens.length][queens.length];
-        for(int i=0;i< queens.length;i++){
-            for(int j=0;j<queens.length;j++){
-                if((j)==queens[i]){
-                    arr[i][j]=1;
+
+        for (int col = 0; col < n; col++) {
+            if (isSafe(board, row, col, n)) {
+                board[row][col] = 1;
+                if (solveNQueensUtil(board, row + 1, n)) {
+                    return true;
                 }
-                else{
-                    arr[i][j]=0;
-                }
+                board[row][col] = 0;
             }
         }
-        for(int i=0;i< queens.length;i++){
-            for(int j=0;j<queens.length;j++){
-                System.out.print(arr[i][j]+" ");
-            }
-            System.out.println();
+
+        return false;
+    }
+
+    public static void solveNQueens(int n) {
+        int[][] board = new int[n][n];
+        if (!solveNQueensUtil(board, 0, n)) {
+            System.out.println("Solution does not exist");
+            return;
         }
+
+        System.out.println("Solution:");
+        for (int[] row : board) {
+            System.out.println(Arrays.toString(row));
         }
     }
 
     public static void main(String[] args) {
-        Scanner in= new Scanner(System.in);
-    System.out.print("Enter N Queens Problem: ");
-    int n = in.nextInt();
-        NQueensProblem NQueensProblem = new NQueensProblem(n);
-        NQueensProblem.solve();
+        Scanner sc=new Scanner(System.in);
+          System.out.println("Enter the no of Queens: ");
+          int n=sc.nextInt();
+         // Board size
+        solveNQueens(n);
     }
 }
