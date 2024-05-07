@@ -1,0 +1,42 @@
+import heapq
+
+class Graph:
+    def __init__(self, vertices):
+        self.V = vertices
+        self.graph = [[] for _ in range(vertices)]
+
+    def add_edge(self, u, v, w):
+        self.graph[u].append((v, w))
+        self.graph[v].append((u, w))
+
+    def prim_mst(self):
+        visited = [False] * self.V
+        min_heap = []
+        mst_cost = 0
+        # Start Prim's algorithm from vertex 0
+        heapq.heappush(min_heap, (0, 0)) # (weight, vertex)
+
+        while min_heap:
+            weight, u = heapq.heappop(min_heap)
+            if not visited[u]:
+                mst_cost += weight
+                visited[u] = True
+                for v, w in self.graph[u]:
+                    if not visited[v]:
+                        heapq.heappush(min_heap, (w, v))
+        return mst_cost
+
+# Take input from the user for the number of vertices and edges
+num_vertices = int(input("Enter the number of vertices: "))
+num_edges = int(input("Enter the number of edges: "))
+
+# Create the graph
+g = Graph(num_vertices)
+
+# Take input for each edge
+for _ in range(num_edges):
+    u, v, w = map(int, input("Enter source, destination, and weight separated by space: ").split())
+    g.add_edge(u, v, w)
+
+# Find the Minimum Spanning Tree (MST) cost using Prim's algorithm
+print("Minimum Spanning Tree cost:", g.prim_mst())
